@@ -1,0 +1,95 @@
+﻿@model List<Data.Models.Laptop>;
+
+@{
+    string? alertMessage = TempData["alertMessage"]?.ToString();
+    string productImagePlaceholder = "https://st.depositphotos.com/1001069/1998/i/950/depositphotos_19988345-stock-photo-laptop-with-blank-screen.jpg";
+}
+
+<h1>All Laptops</h1>
+<p>@Model.Count Products found</p>
+
+@*<ul>
+    @foreach (var laptop in Model)
+    {
+        <li>@laptop.Model - @laptop.Price$</li>
+    }
+</ul>*@
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Image</th>
+            <th scope="col">Model</th>
+            <th scope="col">Display</th>
+            <th scope="col">Processor</th>
+            <th scope="col">OS</th>
+            <th scope="col">Price</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var laptop in Model)
+        {
+            <tr class="align-middle">
+                <th scope="row">@laptop.Id</th>
+                <td>
+                    <div class="image-cell-block">
+                        <img src="@(laptop.ImagePath ?? productImagePlaceholder)" class="image-cell" />
+                    </div>
+                </td>
+                <td>@laptop.Model</td>
+                <td>@laptop.Display</td>
+                <td>@laptop.Processor</td>
+                <td>@laptop.OperationSystem?.Name</td>
+                <td>@laptop.Price$</td>
+                <td>
+                    <div class="btn-group">
+                        <a asp-controller="Laptops" asp-action="Details" asp-route-id="@laptop.Id" class="btn btn-secondary">
+                            <i class="fa-solid fa-info"></i>
+                        </a>
+                        <a asp-controller="Laptops" asp-action="Edit" asp-route-id="@laptop.Id" class="btn btn-warning">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        <a asp-controller="Laptops" asp-action="Delete" asp-route-id="@laptop.Id" class="btn btn-danger">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Laptops" asp-action="Create" class="btn btn-primary">
+    <i class="fa-solid fa-plus"></i> Create New Laptop
+</a>
+
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+    <div id="toster-block" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                @alertMessage
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{   
+    @if (alertMessage != null)
+    {
+        <script>
+            var toasterBlock = document.getElementById('toster-block')
+        
+            function showToaster()
+            {
+                var toast = new bootstrap.Toast(toasterBlock)
+                toast.show()
+            }
+
+            showToaster();
+        </script>
+    }
+}
